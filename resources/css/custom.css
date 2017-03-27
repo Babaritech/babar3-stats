@@ -1,0 +1,20 @@
+table td{
+	padding:4px;
+	vertical-align:top;
+}
+
+
+.table-head td {
+
+	font-weight:bold;
+	color:white;
+	background-color:#004780;
+}
+
+table.altern tr:nth-child(even):not(.table-head) td  {
+	background-color:#c1e8ff;
+}
+
+table.altern tr:nth-child(odd):not(.table-head) td {
+	background-color:#e2f4ff;
+}

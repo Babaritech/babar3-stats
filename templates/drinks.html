@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<script>
+var drinks = [];
+{% for drink in drinks %}
+drinks.push({"id":{{drink.id}}, "name": "{{ drink.name}}"}); {% endfor %}
+
+function autoComplete(text){
+
+	if(text.length < 3) {
+		document.getElementById('res').innerHTML = '<strong>Please type at least 3 characters</strong>';
+		return;
+	}
+
+	res = searchdrink(text);
+
+	newtext = '';
+	for (i=0;i < Math.min(res.length, 10); i++) {
+		newtext += '&raquo;&nbsp;';
+		newtext += '<a href="/stats/drink/'+res[i]['id']+'">';
+		newtext += res[i]['name'];
+		newtext += '</a>';
+		newtext += '<br />';
+	}
+
+	document.getElementById('res').innerHTML = newtext;
+}
+
+
+function searchdrink(text) {
+
+	res = [];
+
+	pattern = /(\s|_|-|'|")/g;
+	text = text.replace(pattern, '');
+
+	r = new RegExp(text, "i");
+
+	for (i=0; i<drinks.length; i++) {
+		c = drinks[i];
+
+		s = (c['name']).replace(pattern, '');
+
+		if (s.search(r)!=-1) {
+			res.push(c);
+		}
+	}
+
+	return res;
+}
+</script>
+
+<br /><br />
+<br /><br />
+<table style="width:100%">
+	<tr>
+		<td>
+			<h1>Drink search</h1>
+
+			{% if errors %}
+			<br/><pre class="error">{{ errors }}</pre>
+			{% endif %}
+			<br />
+			<div>
+				<input id="search" placeholder="drink name" onKeyUp="autoComplete(this.value)">
+			</div>
+			<br />
+			<div id="res"></div>
+			</div>
+		</td>
+		<td>
+			<h1>Top drinks</h1>
+			<br />
+			<table class="altern" style="width:50%">
+				<tr class="table-head">
+					<td>Name</td>
+					<td>Quantity</td>
+				</tr>
+				{% for td in topdrinks %}
+				<tr>
+					<td><a href="{{ url_for('statsdrink', id=td.product.id)}}">{{ td.product.name }}</a></td>
+					<td>{{ td.amount }}</td>
+				{% endfor %}
+		</td>
+	</tr>
+</table>
+<script>document.getElementById('search').focus(); </script>
+
+{% endblock%}

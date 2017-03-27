@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<br /><br />
+<br /><br />{% if errors %}
+<br/><pre class="error">{{ errors }}</pre>
+{% endif %}
+
+<br />
+<div>
+	<table style="width:100%">
+		<tr>
+			<td style="width:30%">
+				<h1>Statistics</h1>
+				<br />
+				<table style="width:100%">
+					<tr>
+						<td style="width:30%">&raquo; <b>Name</b></td>
+						<td>{{ drink.name }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Price</b></td>
+						<td>{{ drink.price }} &euro;</td>
+					</tr>
+				</table>
+				<br /><br />
+			</td>
+			<td style="width:30%" rowspan=2>
+				<h1>Top consumers</h1>
+				<br />
+				<table style="width:70%" class="altern">
+					<tr class="table-head">
+						<td style="width:70%;">Name</td>
+						<td style="width:30%">Quantity</td>
+					</tr>
+					{% for toppr in topcustomers %}
+					<tr>
+						<td><a href="{{url_for('statscustomer', id= toppr.customer.id) }}">{{ toppr.customer.firstname + ' ' + toppr.customer.lastname }}</a></td>
+						<td>{{ toppr.qty }}</td>
+					</tr>
+					{% endfor%}
+				</table>
+			</td>
+			<td style="width:40%" rowspan=2>
+				<h1>Last consumers</h1>
+				<br />
+				<table class="altern" style="width:70%">
+					<tr class="table-head">
+						<td>Name</td>
+						<td>Date</td>
+					</tr>
+					{% for purchase in purchases %}
+					<tr>
+						<td><a href="{{ url_for('statscustomer', id=purchase.customer.id) }}">{{ purchase.customer.firstname + ' ' + purchase.customer.lastname }}</a></td>
+						<td>{{ purchase.timestamp }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+{% endblock%}

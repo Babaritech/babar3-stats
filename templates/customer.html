@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<br /><br />
+<br /><br />{% if errors %}
+<br/><pre class="error">{{ errors }}</pre>
+{% endif %}
+
+<br />
+<div>
+	<table style="width:100%">
+		<tr>
+			<td style="width:40%">
+				<h1>Statistics</h1>
+				<br />
+				<table style="width:100%">
+					<tr>
+						<td style="width:30%">&raquo; <b>First name</b></td>
+						<td>{{ customer.firstname }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Last name</b></td>
+						<td>{{ customer.lastname }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Nickname</b></td>
+						<td>{{ customer.nickname }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Status</b></td>
+						<td>{{ customer.status.name }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Promo</b></td>
+						<td>{{ customer.year }}</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Balance</b></td>
+						<td style="color:{{ customer.color }}">{{ customer.balance }}&euro;</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Allowed overdraft</b></td>
+						<td>{{ customer.overdraft }}&euro;</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Amount invested</b></td>
+						<td>{{ customer.alltime }}&euro;</td>
+					</tr>
+					<tr>
+						<td>&raquo; <b>Last purchase</b></td>
+						<td>{{ customer.last }}</td>
+					</tr>
+				</table>
+				<br /><br />
+				<h1>Deposit history</h1>
+				<br />
+				<table class="altern" style="width:50%">
+					<tr class="table-head">
+						<td>Amount</td>
+						<td>Date</td>
+					</tr>
+					{% for elt in payhistory %}
+					<tr>
+						<td>{{ elt.amount }}</td>
+						<td>{{ elt.timestamp }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+			<td style="width:30%" rowspan=2>
+				<h1>Alcoholic achievements</h1>
+				<br />
+				<table style="width:70%" class="altern">
+					<tr class="table-head">
+						<td style="width:70%;">Name</td>
+						<td style="width:30%">Quantity</td>
+					</tr>
+					{% for id in countdict %}
+					<tr>
+						<td>
+							<a href="{{ url_for('statsdrink', id= drinks[id[0]]['obj'].id) }}">{{ drinks[id[0]]['obj'].name }}</a>
+						</td>
+						<td>
+							{{ drinks[id[0]]['count'] }}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+			<td style="width:30%" rowspan=2>
+				<h1>Customer history</h1>
+				<br />
+				<table style="width:80%" class="altern">
+					<tr class="table-head">
+						<td style="width:50%;">Product</td>
+						<td style="width:50%">Date</td>
+					</tr>
+					{% for elt in history %}
+					<tr>
+						<td>
+							{{ elt.product.name }} x{{ (elt.quantity) }}
+						</td>
+						<td>
+							{{ elt.timestamp }}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+{% endblock%}

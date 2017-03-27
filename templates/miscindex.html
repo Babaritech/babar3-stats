@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<br /><br /><br />
+
+{% if errors %}
+<br/><pre class="error">{{ errors }}</pre>
+{% endif %}
+
+<script>
+	function valiDate(d) {
+
+		datere = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) ([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+		return datere.test(d);
+
+	}
+
+	function queryFinancialCB(response) {
+
+		response = JSON.parse(response);
+		if (response == {}) 
+			document.getElementById('financial_result').innerHTML = '<span style="color:red">Error</span>';
+		else
+			document.getElementById('financial_result').innerHTML = '<b>Payments:</b> '+response['payments']+'&nbsp;&euro;<br /><b>Purchases:</b> '+response['purchases']+'&nbsp;&euro;';
+
+	}
+
+	function queryFinancial() {
+
+		dfrom = document.getElementById('dfrom').value;
+		dto = document.getElementById('dto').value;
+
+		if(!valiDate(dfrom) || !valiDate(dto)) {
+			alert('Invalid date entered!');
+			return false;
+		}
+
+		request('POST', '{{url_for('financialquery')}}', queryFinancialCB, ('dfrom='+encodeURI(dfrom)+'&dto='+encodeURI(dto)));
+	}
+</script>
+
+<table style='width:100%;margin-top:20px;'>
+	<tr>
+		<td>
+			<h3>Financial summary</h3>
+			<br />
+			<table>
+				<tr>
+					<td>From: </td>
+					<td><input id="dfrom" name="dfrom" placeholder="YYYY-mm-dd HH:mm:ss" class="center" maxlength=19 /></td>
+				</tr>
+				<tr>
+					<td>To:</td>
+					<td><input id="dto" name="dto" placeholder="YYYY-mm-dd HH:mm:ss" class="center" maxlength=19/></td>
+				</tr>
+				<tr>
+					<td class="center">
+						<input type="button" value="Compute!" onClick="queryFinancial()"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2 id="financial_result"></td>
+				</tr>
+		</td>
+	</tr>
+</div>
+
+{% endblock%}
+
